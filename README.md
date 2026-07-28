@@ -1,8 +1,18 @@
 # FLOW PM KIT
 
-AI와 함께 **기획 문서 → 모바일 UX → 웹 확장 → 클릭형 프로토타입 → 사수 리뷰 → QA**까지 이어가는 재사용 가능한 PM/PO 작업 키트.
+ChatGPT를 메인 PM/PO Copilot으로 두고 **기획 문서 → 모바일 UX → 웹 확장 → 클릭형 프로토타입 → 사수 리뷰 → QA**까지 이어가는 재사용 작업 키트.
 
-## 핵심
+## 핵심 구조
+
+```text
+사용자
+→ ChatGPT = 메인 PM / 기획 / UX / 판단
+→ Flow4Work/workflow = 작업 규칙과 기준의 Source of Truth
+→ 결과물
+→ 필요할 때만 OpenCode = 로컬 코드 적용 / build / lint / runtime 검증
+```
+
+## 기본 원칙
 - Mobile First
 - 기본 모바일 기준 390×844
 - 360×800 / 390×844 / 430×932 검증
@@ -10,19 +20,32 @@ AI와 함께 **기획 문서 → 모바일 UX → 웹 확장 → 클릭형 프�
 - Toss-inspired simplicity, not pixel-copying
 - 결과 + 주요 판단 이유
 - 사실 / 가정 / 확인 필요 분리
-- 승인 전 외부 write 금지
 - mock/local 프로토타입 우선
+- 승인 전 외부 write 금지
 - GitHub가 Source of Truth
 - Vercel 배포 없음
 
-## 가장 빠른 사용
+## ChatGPT에서 가장 빠른 사용
 
-OpenCode에서 이 저장소를 clone한 뒤 프로젝트 루트에서 실행한다.
-
-### 전체 파이프라인
 ```text
-/flow 만들고 싶은 아이디어 또는 기존 기획
+workflow 기준으로 이 아이디어 전체 기획해줘: [내용]
 ```
+
+UI 중심:
+
+```text
+workflow 기준으로 [기능] 모바일 우선 UI/UX + 웹 확장 + 클릭형 프로토타입까지 만들어줘
+```
+
+문서만:
+
+```text
+workflow 기준으로 [내용] PRD 만들어줘
+```
+
+ChatGPT는 작업 전 최신 `INDEX.md`, `AGENTS.md`와 요청에 필요한 규칙을 확인하고 결과물을 직접 만든다.
+
+## 기본 Workflow
 
 아이디어
 → Product Document
@@ -33,42 +56,10 @@ OpenCode에서 이 저장소를 clone한 뒤 프로젝트 루트에서 실행한
 → QA
 → Next Validation
 
-### 문서
-- `/prd 아이디어`
-- `/proposal 제안 내용`
-- `/requirements 기능/서비스`
-- `/policy 정책 주제`
-- `/report 자료/현황`
+## 선택 도구: OpenCode
+OpenCode는 메인 Copilot이 아니다. 실제 로컬 프로젝트에서 대량 코드 수정, lint, typecheck, build, runtime 검증이 필요할 때 보조 실행기로 사용한다.
 
-### UI / Prototype
-- `/ui 기능/문서` — 모바일 UX → 웹 확장 → 프로토타입
-- `/screen 기능/문서`
-- `/prototype 기능/문서`
-
-### 검토
-- `/review 산출물`
-- `/qa 대상`
-
-## ChatGPT / 다른 AI에서 사용
-저장소를 기준으로 다음처럼 요청한다.
-
-```text
-Flow4Work/workflow의 FLOW PM KIT 기준으로 이 아이디어 기획해줘: [내용]
-```
-
-전체 실행:
-
-```text
-Flow4Work/workflow의 전체 FLOW PM 파이프라인으로 진행해줘: [내용]
-```
-
-UI 중심:
-
-```text
-Flow4Work/workflow 기준으로 모바일 우선 UI/UX + 웹 확장 + 클릭형 프로토타입까지 만들어줘: [내용]
-```
-
-자세한 사용법은 `docs/CHAT_USE.md`, 전체 파일 지도는 `INDEX.md` 참고.
+저장소의 `.opencode/skills/`와 `.opencode/commands/`는 OpenCode에서도 같은 작업 방식을 재사용할 수 있게 둔 호환 레이어다.
 
 ## 기본 디자인 방향
 - 모바일을 원본으로 설계한다.
@@ -82,7 +73,8 @@ Flow4Work/workflow 기준으로 모바일 우선 UI/UX + 웹 확장 + 클릭형 
 ## Source of Truth
 - `INDEX.md`: 전체 진입점
 - `AGENTS.md`: 프로젝트 규칙
-- `.opencode/skills/`: 재사용 작업 스킬
-- `.opencode/commands/`: Slash commands
+- `.opencode/skills/`: 재사용 작업 스킬 정의
+- `.opencode/commands/`: OpenCode 호환 Slash commands
 - `docs/design/`: Mobile / Web / UI 원칙
 - `docs/templates/OUTPUT_PACKAGE.md`: 기본 산출물 패키지
+- `docs/CHAT_USE.md`: ChatGPT 사용법
