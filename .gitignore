@@ -1,0 +1,16 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# local/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# generated prototypes
+dist/
+build/
+.next/
+node_modules/
