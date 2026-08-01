@@ -1,4 +1,4 @@
-name: Temporary Whisper Small Model Transfer
+name: Temporary Whisper Fast Models Transfer
 
 on:
   pull_request:
@@ -9,24 +9,30 @@ permissions:
   contents: read
 
 jobs:
-  download-model:
+  download-models:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Download verified Whisper small model
+      - name: Download and verify models
         shell: bash
         run: |
           set -euo pipefail
           curl -L --fail --retry 5 --retry-delay 5 \
-            -o ggml-small-q5_1.bin \
-            'https://huggingface.co/ggerganov/whisper.cpp/resolve/98aa99a0a9db05ae2342309f5096248665f7cba3/ggml-small-q5_1.bin?download=true'
-          echo 'ae85e4a935d7a567bd102fe55afc16bb595bdb618e11b2fc7591bc08120411bb  ggml-small-q5_1.bin' | sha256sum -c -
-          ls -lh ggml-small-q5_1.bin
+            -o ggml-base-q5_1.bin \
+            'https://huggingface.co/ggerganov/whisper.cpp/resolve/98aa99a0a9db05ae2342309f5096248665f7cba3/ggml-base-q5_1.bin?download=true'
+          curl -L --fail --retry 5 --retry-delay 5 \
+            -o ggml-tiny-q5_1.bin \
+            'https://huggingface.co/ggerganov/whisper.cpp/resolve/98aa99a0a9db05ae2342309f5096248665f7cba3/ggml-tiny-q5_1.bin?download=true'
+          echo '422f1ae452ade6f30a004d7e5c6a43195e4433bc370bf23fac9cc591f01a8898  ggml-base-q5_1.bin' | sha256sum -c -
+          echo '818710568da3ca15689e31a743197b520007872ff9576237bda97bd1b469c3d7  ggml-tiny-q5_1.bin' | sha256sum -c -
+          ls -lh ggml-base-q5_1.bin ggml-tiny-q5_1.bin
 
-      - name: Upload model
+      - name: Upload models
         uses: actions/upload-artifact@v4
         with:
-          name: whisper-small-q5-model
-          path: ggml-small-q5_1.bin
+          name: whisper-fast-models
+          path: |
+            ggml-base-q5_1.bin
+            ggml-tiny-q5_1.bin
           compression-level: 0
           retention-days: 1
