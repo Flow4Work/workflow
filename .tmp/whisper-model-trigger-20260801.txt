@@ -1,1 +1,1 @@
-Temporary trigger for a one-time Whisper small-model transfer. Remove after completion.
+Temporary trigger for one-time Whisper base/tiny model transfer. Remove after completion.
